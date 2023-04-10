@@ -131,7 +131,7 @@
           dateFormat = instance.settings.dateFormat, 
           reverse = instance.settings.reverse;
       
-      items = reverse == 'true' ? items : items.reverse();
+      items = reverse == true ? items : items.reverse();
 
       function getDate(str){
         let date = new Date(str)
