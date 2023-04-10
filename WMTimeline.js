@@ -1,6 +1,6 @@
 /* =========
-  Full Screen Menu 
-  A Simple Full Screen Menu For Squarespace
+  Timeline Plugin for Squarespace
+  Create A Timeline Component from A Blog Collection
   This Code is Licensed by Will-Myers.com
 ========== */
 (function () {
