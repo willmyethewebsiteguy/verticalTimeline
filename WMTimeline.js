@@ -198,7 +198,14 @@
         
         let xfp = item.mediaFocalPoint.x;
         let yfp = item.mediaFocalPoint.y;
-        let dateEl = `<div class="tl-date"><p>${getDate(item.publishOn)}</p></div>`;
+        let dateString;
+        console.log(dateFormat)
+        if (dateFormat == 'tag') {
+          dateString = item.tags ? item.tags[0] : '';
+        } else {
+          dateString = getDate(item.publishOn)
+        }
+        let dateEl = `<div class="tl-date"><p>${dateString}</p></div>`;
         let title = item.title;
         let body = item.body;
         let excerpt = item.excerpt;
@@ -331,7 +338,7 @@ ${titleFormat.mono ? `<code>` : ``}${title}${titleFormat.mono ? `</code>` : ``}<
           let val = el.dataset.dateFormat;
           if (val == 'undefined') {
             val = 'normal'
-          } else if (val == 'time' || val == 'time-24' || val == 'weekday' || val == 'month' || val == 'year') {
+          } else if (val == 'time' || val == 'time-24' || val == 'weekday' || val == 'month' || val == 'year' || val == 'tag') {
             val = el.dataset.dateFormat
           } else {
             val = 'normal'
