@@ -121,15 +121,21 @@
     
     function buildHTML(instance) {
       let items = instance.settings.items,
-          container = instance.elements.container,
-          html = '',
-          i = 0,
-          media = instance.settings.media, 
-          date = instance.settings.date, 
-          titleFormat = getTitleFormat(instance.settings.titleFormat),
-          content = instance.settings.content, 
-          dateFormat = instance.settings.dateFormat, 
-          reverse = instance.settings.reverse;
+        container = instance.elements.container,
+        html = '',
+        i = 0,
+        media = instance.settings.media, 
+        date = instance.settings.date, 
+        titleFormat = getTitleFormat(instance.settings.titleFormat),
+        content = instance.settings.content, 
+        dateFormat = instance.settings.dateFormat, 
+        reverse = instance.settings.reverse,
+        links = instance.settings.links,
+        target;
+
+      if (typeof links === 'string' || links instanceof String){
+        target = links.toLowerCase().includes('window') ? '_blank' : '_self';
+      }
       
       items = reverse == true ? items : items.reverse();
 
@@ -199,7 +205,6 @@
         let xfp = item.mediaFocalPoint.x;
         let yfp = item.mediaFocalPoint.y;
         let dateString;
-        console.log(dateFormat)
         if (dateFormat == 'tag') {
           dateString = item.tags ? item.tags[0] : '';
         } else {
@@ -210,20 +215,22 @@
         let body = item.body;
         let excerpt = item.excerpt;
         let image = item.assetUrl;
-        let isFirstOrLast
+        let href = item.fullUrl;
+        let isFirstOrLast;
             
         i = 0 ? isFirstOrLast = true : isFirstOrLast = false;
         i = items.length ? isFirstOrLast = true : isFirstOrLast = false;
         
         let event = `<div class="tl-event">
   ${date == 'opposite' ? dateEl : ''}
-  <div class="tl-content sqs-block-html">
+  ${links ? `<a href="${href}" target="${target}" class="tl-content sqs-block-html">` : `<div class="tl-content sqs-block-html">`}
     <span class="arrow"></span>
     ${dateEl}
     <${titleFormat.tag} class="tl-title ${titleFormat.class}">
-${titleFormat.mono ? `<code>` : ``}${title}${titleFormat.mono ? `</code>` : ``}</${titleFormat.tag}>
+      ${titleFormat.mono ? `<code>` : ``}${title}${titleFormat.mono ? `</code>` : ``}
+    </${titleFormat.tag}>
     <div class="tl-body">${content == 'body' ? body : excerpt}</div>
-  </div>
+  ${links ? `</a>` : `</div>`}
   <div class="tl-media" style="--x: ${xfp}; --y: ${yfp};">
     ${media == "image" ? `<img src="${image}">` : ''}
   </div>
@@ -349,6 +356,17 @@ ${titleFormat.mono ? `<code>` : ``}${title}${titleFormat.mono ? `</code>` : ``}<
           let shouldReverse = el.dataset.reverse == 'true' ? true : false;
           return shouldReverse
         },
+        get links() {
+          let val = el.dataset.links;
+          if (val == 'undefined') {
+            val = false
+          } else if (val == 'true' || val == 'newWindow') {
+            val = el.dataset.links
+          } else {
+            val = false
+          }
+          return val
+        }
       };
       
       instance.elements = {
