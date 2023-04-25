@@ -201,9 +201,8 @@
       }
       
       for (let item of items) {
-        
-        let xfp = item.mediaFocalPoint.x;
-        let yfp = item.mediaFocalPoint.y;
+        let xfp = item.mediaFocalPoint?.x;
+        let yfp = item.mediaFocalPoint?.y;
         let dateString;
         if (dateFormat == 'tag') {
           dateString = item.tags ? item.tags[0] : '';
