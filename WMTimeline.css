@@ -234,6 +234,13 @@ This Code is Licensed by Will-Myers.com
   display:block;
 }
 
+.wm-timeline[data-date="none"] .tl-event > .tl-date{
+ display:none !important;
+}
+.wm-timeline[data-date="none"] .tl-content > .tl-date{
+ display:none !important;
+}
+
 .wm-timeline[data-date="opposite"] .tl-event > .tl-date{
  display:block;
 }
