@@ -205,10 +205,11 @@
         let yfp = item.mediaFocalPoint?.y;
         let dateString;
         if (dateFormat == 'tag') {
-          dateString = item.tags ? item.tags[0] : '';
+          dateString = item.tags.length ? item.tags[0] : '';
         } else {
           dateString = getDate(item.publishOn)
         }
+        
         let dateEl = `<div class="tl-date"><p>${dateString}</p></div>`;
         let title = item.title;
         let body = item.body;
@@ -266,7 +267,9 @@
       instance.settings.data = data;
       instance.settings.items = data.items;
       
-      window.dispatchEvent(new Event(`WMTimeline${utils.timelines}:loaded`));
+      container.dispatchEvent(new Event(`WMTimeline${utils.timelines}:loaded`, {
+        bubbles: true
+      }));
       utils.timelines += utils.timelines;
     }
 
@@ -278,6 +281,7 @@
 
     function Constructor(el) {
       let instance = this;
+      console.log(el);
       instance.settings = {
         get collectionUrl() {
           let collection = el.dataset.collection
@@ -378,7 +382,7 @@
         }
       };
 
-      window.addEventListener(`WMTimeline${utils.timelines}:loaded`, function(){
+      instance.elements.container.addEventListener(`WMTimeline${utils.timelines}:loaded`, function(){
         buildHTML(instance)
         setLastEventHeight(instance);
         addResizeEventListener(instance);
