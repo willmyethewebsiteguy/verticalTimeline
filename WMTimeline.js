@@ -205,7 +205,7 @@
         let yfp = item.mediaFocalPoint?.y;
         let dateString;
         if (dateFormat == 'tag') {
-          dateString = item.tags.length ? item.tags[0] : '';
+          dateString = item.tags[0] ? item.tags[0] : '';
         } else {
           dateString = getDate(item.publishOn)
         }
