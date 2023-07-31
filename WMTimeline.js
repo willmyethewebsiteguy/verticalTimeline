@@ -220,17 +220,16 @@
             
         i = 0 ? isFirstOrLast = true : isFirstOrLast = false;
         i = items.length ? isFirstOrLast = true : isFirstOrLast = false;
-        
         let event = `<div class="tl-event">
   ${date == 'opposite' ? dateEl : ''}
-  ${links ? `<a href="${href}" target="${target}" class="tl-content sqs-block-html">` : `<div class="tl-content sqs-block-html">`}
+  ${links ? `<div data-href="${href}" target="${target}" class="tl-content sqs-block-html">` : `<div class="tl-content sqs-block-html">`}
     <span class="arrow"></span>
     ${dateEl}
     <${titleFormat.tag} class="tl-title ${titleFormat.class}">
       ${titleFormat.mono ? `<code>` : ``}${title}${titleFormat.mono ? `</code>` : ``}
     </${titleFormat.tag}>
     <div class="tl-body">${content == 'body' ? body : excerpt}</div>
-  ${links ? `</a>` : `</div>`}
+  </div>
   <div class="tl-media" style="--x: ${xfp}; --y: ${yfp};">
     ${media == "image" ? `<img src="${image}">` : ''}
   </div>
@@ -244,7 +243,7 @@
       <div class="tl-bar">
         <span></span>
       </div>
-      </div>`);
+    </div>`);
       
       if (content == 'body') {
         imageLoader(instance)
@@ -279,9 +278,23 @@
       })
     } 
 
+    function addClickEventListener(instance) {
+      let links = instance.settings.links;
+      if (!links) return;
+      document.addEventListener('click', function(e){
+        if (!e.target.closest('.tl-content[data-href]')) return;
+        let href = e.target.closest('.tl-content[data-href]').getAttribute('data-href');
+        let target = '_self';
+        if (typeof links === 'string' || links instanceof String){
+          target = links.toLowerCase().includes('window') ? '_blank' : '_self';
+        }
+        window.open(href, target);
+      })
+    } 
+
     function Constructor(el) {
       let instance = this;
-      console.log(el);
+
       instance.settings = {
         get collectionUrl() {
           let collection = el.dataset.collection
@@ -386,6 +399,7 @@
         buildHTML(instance)
         setLastEventHeight(instance);
         addResizeEventListener(instance);
+        addClickEventListener(instance)
       });
       getData(instance);
     }
