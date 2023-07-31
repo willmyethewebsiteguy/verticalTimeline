@@ -49,6 +49,9 @@ This Code is Licensed by Will-Myers.com
   position:relative;
   border-radius: var(--border-radius);
 }
+.tl-content[data-href]{
+  cursor: pointer;
+}
 .tl-event .tl-content > .arrow {
   content:'';
   position:absolute;
