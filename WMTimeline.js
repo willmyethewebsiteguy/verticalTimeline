@@ -75,6 +75,49 @@
         console.error(error);
       }
     },
+    async getCollectionItems(href, options = {filter: null, cache: false}) {
+      let collectionItems = [];
+    
+      let getPageItems = async (pageUrl) => {
+        console.log(pageUrl)
+        let url = new URL(pageUrl);
+        let searchParams = new URLSearchParams(url.search);
+        let response;
+  
+        if (!options.cache) {
+          searchParams.set('time', new Date().getTime());
+          url.search = searchParams.toString();
+        }
+          
+        try {
+          searchParams.set('format', 'json');
+          url.search = searchParams.toString();
+          response = await fetch(`${url.href}`);
+    
+          if (!response.ok) {
+            throw `Something went wrong with ${url}`;
+          }
+    
+          let data = await response.json();
+          data.items.forEach(item => collectionItems.push(item))
+
+          if (data.pagination && data.pagination.nextPage){
+            searchParams.set('offset', data.pagination.nextPageOffset);
+            url.search = searchParams.toString();
+            return await getPageItems(url.href); // Use 'pathname' property
+          } else {
+            console.log(collectionItems)  
+            return collectionItems;
+          }
+    
+        } catch (error) {
+          console.log('error getting collection data');
+          console.log(error);
+        }
+      }
+    
+      return await getPageItems(window.location.origin + href); // Await the result
+    },
     getPropertyValue: function (el, prop) {
       let propValue = window.getComputedStyle(el).getPropertyValue(prop),
           cleanedValue = propValue.trim().toLowerCase(),
@@ -204,7 +247,7 @@
         let xfp = item.mediaFocalPoint?.x;
         let yfp = item.mediaFocalPoint?.y;
         let dateString;
-        if (dateFormat == 'tag') {
+        if (item.tags && dateFormat == 'tag') {
           dateString = item.tags[0] ? item.tags[0] : '';
         } else {
           dateString = getDate(item.publishOn)
@@ -255,7 +298,8 @@
         url = instance.settings.collectionUrl,
         cache = instance.settings.cache,
         options = {cache: cache},
-        data = await utils.getCollection(url, options);
+        data = await utils.getCollectionItems(url, options);
+      
 
       if (typeof data === 'string' || data instanceof String) {
         container.insertAdjacentHTML('afterbegin', data)
@@ -263,8 +307,7 @@
       } 
       
       container.classList.add('wm-timeline');
-      instance.settings.data = data;
-      instance.settings.items = data.items;
+      instance.settings.items = data;
       
       container.dispatchEvent(new Event(`WMTimeline${utils.timelines}:loaded`, {
         bubbles: true
