@@ -204,6 +204,10 @@
           options = { year: 'numeric' };
         }
 
+        if (dateFormat == 'month-year') {
+          options = { month: 'long', year: 'numeric' };
+        }
+
         return date.toLocaleDateString(undefined, options)
       }
 
@@ -404,7 +408,7 @@
           let val = el.dataset.dateFormat;
           if (val == 'undefined') {
             val = 'normal'
-          } else if (val == 'time' || val == 'time-24' || val == 'weekday' || val == 'month' || val == 'year' || val == 'tag') {
+          } else if (val == 'time' || val == 'time-24' || val == 'weekday' || val == 'month' || val == 'year' || val == 'tag' || val == 'month-year') {
             val = el.dataset.dateFormat
           } else {
             val = 'normal'
