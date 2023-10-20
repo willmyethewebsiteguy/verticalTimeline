@@ -32,6 +32,7 @@ This Code is Licensed by Will-Myers.com
 }
 .tl-event {
   z-index:1;
+  min-width:0;
 }
 .tl-bar {
   position:absolute;
@@ -48,6 +49,7 @@ This Code is Licensed by Will-Myers.com
 .tl-event .tl-content{
   position:relative;
   border-radius: var(--border-radius);
+  min-width:0;
 }
 .tl-content[data-href]{
   cursor: pointer;
