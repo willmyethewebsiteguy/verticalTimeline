@@ -106,7 +106,6 @@
             url.search = searchParams.toString();
             return await getPageItems(url.href); // Use 'pathname' property
           } else {
-            console.log(collectionItems)  
             return collectionItems;
           }
     
@@ -442,12 +441,14 @@
         }
       };
 
-      instance.elements.container.addEventListener(`WMTimeline${utils.timelines}:loaded`, function(){
-        buildHTML(instance)
-        setLastEventHeight(instance);
-        addResizeEventListener(instance);
-        addClickEventListener(instance)
-      });
+      instance.elements.container
+        .addEventListener(`WMTimeline${utils.timelines}:loaded`, function(){
+          buildHTML(instance)
+          setLastEventHeight(instance);
+          addResizeEventListener(instance);
+          addClickEventListener(instance)
+          window.Squarespace?.globalInit(Y)
+        });
       getData(instance);
     }
 
