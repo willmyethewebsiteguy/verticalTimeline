@@ -202,7 +202,6 @@
         if (dateFormat == 'year') {
           options = { year: 'numeric' };
         }
-
         if (dateFormat == 'month-year') {
           options = { month: 'long', year: 'numeric' };
         }
@@ -315,6 +314,9 @@
       container.dispatchEvent(new Event(`WMTimeline${utils.timelines}:loaded`, {
         bubbles: true
       }));
+      window.dispatchEvent(new Event('wmTimeline:loaded'), {
+        bubbles: true
+      })
       utils.timelines += utils.timelines;
     }
 
@@ -405,6 +407,7 @@
         },
         get dateFormat() {
           let val = el.dataset.dateFormat;
+          //let settingFormat = window.wmTimelineSettings?.dateFormat;
           if (val == 'undefined') {
             val = 'normal'
           } else if (val == 'time' || val == 'time-24' || val == 'weekday' || val == 'month' || val == 'year' || val == 'tag' || val == 'month-year') {
@@ -449,6 +452,7 @@
           addClickEventListener(instance)
           window.Squarespace?.globalInit(Y)
         });
+      
       getData(instance);
     }
 
