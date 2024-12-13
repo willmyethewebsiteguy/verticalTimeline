@@ -317,6 +317,7 @@
       window.dispatchEvent(new Event('wmTimeline:loaded'), {
         bubbles: true
       })
+      el.dataset.loadingState = 'loaded';
       utils.timelines += utils.timelines;
     }
 
@@ -342,7 +343,7 @@
 
     function Constructor(el) {
       let instance = this;
-
+      el.dataset.loadingState = 'loading';
       instance.settings = {
         get collectionUrl() {
           let collection = el.dataset.collection
@@ -460,9 +461,10 @@
   }());
 
   let initTimeline = () => {
-    let timelines = document.querySelectorAll('[data-wm-plugin="timeline"]');
+    let timelines = document.querySelectorAll('[data-wm-plugin="timeline"]:not([data-loading-state])');
     timelines.forEach(el => new BuildTimeline(el));
   }
+  window.wmInitVerticalTimeline = initTimeline;
   initTimeline();
   window.addEventListener('mercury:load', initTimeline)
   window.wmInitContentLoad = initTimeline;
