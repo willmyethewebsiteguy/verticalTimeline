@@ -317,7 +317,7 @@
       window.dispatchEvent(new Event('wmTimeline:loaded'), {
         bubbles: true
       })
-      el.dataset.loadingState = 'loaded';
+      container.dataset.loadingState = 'loaded';
       utils.timelines += utils.timelines;
     }
 
